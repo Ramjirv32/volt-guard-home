@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+    /* Updated color palette to match design brief */
+    --background: 0 0% 100%;
+    --foreground: 220 26% 14%;
+    --card: 210 40% 96%;
+    --card-foreground: 220 26% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 42%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 22 82% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 82%;
+    --input: 210 40% 96%;
+    --ring: 262 83% 58%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 45 93% 47%;
+    --chart-4: 346 87% 43%;
+    --chart-5: 262 83% 58%;
+    --radius: 0.5rem;
+    --sidebar-background: 210 40% 96%;
+    --sidebar-foreground: 220 26% 14%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 22 82% 48%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 13% 82%;
+    --sidebar-ring: 262 83% 58%;
+    /* Added energy-specific color tokens */
+    --energy-active: 142 76% 36%;
+    --energy-idle: 45 93% 47%;
+    --energy-off: 220 14% 42%;
+  }
+  .dark {
+    --background: 220 26% 14%;
+    --foreground: 0 0% 98%;
+    --card: 220 26% 14%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 26% 14%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 220 26% 14%;
+    --secondary: 215 28% 17%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 215 28% 17%;
+    --muted-foreground: 217 10% 64%;
+    --accent: 215 28% 17%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 215 28% 17%;
+    --input: 215 28% 17%;
+    --ring: 216 12% 84%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 220 26% 14%;
+    --sidebar-foreground: 217 10% 64%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 22 82% 48%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 215 28% 17%;
+    --sidebar-ring: 262 83% 58%;
+    --energy-active: 142 76% 36%;
+    --energy-idle: 45 93% 47%;
+    --energy-off: 220 14% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Added custom utility classes for energy dashboard */
+@layer utilities {
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  .text-energy-active {
+    color: hsl(var(--energy-active));
+  }
+
+  .text-energy-idle {
+    color: hsl(var(--energy-idle));
+  }
+
+  .text-energy-off {
+    color: hsl(var(--energy-off));
+  }
+
+  .bg-energy-active {
+    background-color: hsl(var(--energy-active));
+  }
+
+  .bg-energy-idle {
+    background-color: hsl(var(--energy-idle));
+  }
+
+  .bg-energy-off {
+    background-color: hsl(var(--energy-off));
+  }
+}

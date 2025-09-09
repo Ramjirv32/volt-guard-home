@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
@@ -15,25 +15,40 @@ export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading } = useSelector((state: RootState) => state.auth);
+  const { user, loading } = useSelector((state: RootState) => state.auth);
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const from = (location.state as any)?.from?.pathname || "/dashboard";
 
+  // Check if user is already logged in and redirect
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, navigate]);
+
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await dispatch(loginWithEmail({ email, password }));
-    if (loginWithEmail.fulfilled.match(result)) {
-      navigate(from, { replace: true });
+    try {
+      const result = await dispatch(loginWithEmail({ email, password }));
+      if (loginWithEmail.fulfilled.match(result)) {
+        navigate(from, { replace: true });
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   };
 
   const handleGoogleLogin = async () => {
-    const result = await dispatch(loginWithGoogle());
-    if (loginWithGoogle.fulfilled.match(result)) {
-      navigate(from, { replace: true });
+    try {
+      const result = await dispatch(loginWithGoogle());
+      if (loginWithGoogle.fulfilled.match(result)) {
+        navigate(from, { replace: true });
+      }
+    } catch (error) {
+      console.error("Google login failed:", error);
     }
   };
 
@@ -42,13 +57,17 @@ export default function Login() {
     const viewerEmail = "viewer@smarthome.demo";
     const viewerPassword = "Demo123!";
     
-    const result = await dispatch(loginWithEmail({ 
-      email: viewerEmail, 
-      password: viewerPassword 
-    }));
-    
-    if (loginWithEmail.fulfilled.match(result)) {
-      navigate(from, { replace: true });
+    try {
+      const result = await dispatch(loginWithEmail({ 
+        email: viewerEmail, 
+        password: viewerPassword 
+      }));
+      
+      if (loginWithEmail.fulfilled.match(result)) {
+        navigate(from, { replace: true });
+      }
+    } catch (error) {
+      console.error("Demo login failed:", error);
     }
   };
 

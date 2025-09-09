@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "@/store";
+import { RootState, AppDispatch, store } from "@/store";
 import { setUser } from "@/store/slices/authSlice";
 import { auth } from "@/config/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -15,6 +15,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
   const { user, loading } = useSelector((state: RootState) => state.auth);
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -29,14 +30,19 @@ export function AuthGuard({ children }: AuthGuardProps) {
           })
         );
       } else {
-        dispatch(setUser(null));
+        // Only set user to null if we don't have a demo user
+        const currentUser = store.getState().auth.user;
+        if (!currentUser || currentUser.uid !== 'demo-viewer-uid') {
+          dispatch(setUser(null));
+        }
       }
+      setAuthChecked(true);
     });
 
     return () => unsubscribe();
   }, [dispatch]);
 
-  if (loading) {
+  if (loading || !authChecked) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <LoadingSpinner size="lg" />

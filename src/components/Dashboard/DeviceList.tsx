@@ -29,8 +29,13 @@ export function DeviceList() {
     { id: "4", name: "Smart Lock", type: "lock" as const, status: "off" as const, powerUsage: 5, location: "Front Door", automationEnabled: true, lastActive: new Date().toISOString() },
   ];
 
-  const handleToggle = (deviceId: string) => {
-    dispatch(toggleDevice(deviceId));
+  const handleToggle = async (deviceId: string) => {
+    try {
+      await dispatch(toggleDevice(deviceId)).unwrap();
+    } catch (error) {
+      console.error('Failed to toggle device:', error);
+      // The error is already handled in the thunk, so no need for additional handling here
+    }
   };
 
   const getStatusColor = (status: string) => {

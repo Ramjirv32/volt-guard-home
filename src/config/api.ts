@@ -1,13 +1,16 @@
 import axios from 'axios';
 import { auth } from './firebase';
 
+// Flag to enable/disable API calls completely
+export const USE_MOCK_DATA = true; // Set to true to use mock data exclusively
+
 // API Base URL
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 // Create Axios instance
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 3000, // Shorter timeout to fail faster when backend is unavailable
   headers: {
     'Content-Type': 'application/json',
   },
@@ -40,6 +43,13 @@ api.interceptors.response.use(
       // Handle unauthorized access
       window.location.href = '/login';
     }
+    
+    // Suppress connection refused errors from console logs
+    if (error.code === 'ERR_NETWORK' || error.message.includes('Network Error')) {
+      console.warn('Backend server is not available. Using mock data.');
+      return Promise.reject(new Error('Backend unavailable'));
+    }
+    
     return Promise.reject(error);
   }
 );

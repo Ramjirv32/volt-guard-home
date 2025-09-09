@@ -84,13 +84,6 @@ const createDevice = async (req, res) => {
     
     await device.save();
     
-    // Emit socket event for real-time update
-    const io = req.app.get('io');
-    io.to(`user_${req.userId}`).emit('deviceUpdate', {
-      type: 'deviceAdded',
-      payload: device
-    });
-    
     res.status(201).json(device);
   } catch (error) {
     console.error('Create device error:', error);
@@ -110,13 +103,6 @@ const updateDevice = async (req, res) => {
     if (!device) {
       return res.status(404).json({ message: 'Device not found' });
     }
-    
-    // Emit socket event
-    const io = req.app.get('io');
-    io.to(`user_${req.userId}`).emit('deviceUpdate', {
-      type: 'deviceUpdated',
-      payload: device
-    });
     
     res.json(device);
   } catch (error) {
@@ -142,17 +128,6 @@ const toggleDevice = async (req, res) => {
     device.lastActive = Date.now();
     await device.save();
     
-    // Emit socket event
-    const io = req.app.get('io');
-    io.to(`user_${req.userId}`).emit('deviceUpdate', {
-      type: 'deviceToggled',
-      payload: {
-        deviceId: device._id,
-        status: device.status,
-        powerUsage: device.status === 'on' ? device.powerUsage : 0
-      }
-    });
-    
     res.json(device);
   } catch (error) {
     console.error('Toggle device error:', error);
@@ -171,13 +146,6 @@ const deleteDevice = async (req, res) => {
     if (!device) {
       return res.status(404).json({ message: 'Device not found' });
     }
-    
-    // Emit socket event
-    const io = req.app.get('io');
-    io.to(`user_${req.userId}`).emit('deviceUpdate', {
-      type: 'deviceDeleted',
-      payload: { deviceId: device._id }
-    });
     
     res.json({ message: 'Device deleted successfully' });
   } catch (error) {

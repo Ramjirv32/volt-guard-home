@@ -6,7 +6,8 @@ const {
   getEnergyData,
   getCurrentUsage,
   recordEnergyData,
-  getEnergyStats
+  getEnergyStats,
+  getDeviceBreakdown
 } = require('../controllers/energyController');
 
 const router = express.Router();
@@ -26,6 +27,7 @@ const sensorDataValidation = [
 router.get('/data', authenticate, getEnergyData);
 router.get('/current', authenticate, getCurrentUsage);
 router.get('/stats', authenticate, getEnergyStats);
+router.get('/breakdown', authenticate, getDeviceBreakdown);
 
 // Public route for IoT sensors to post data
 router.post('/record', sensorDataValidation, handleValidationErrors, recordEnergyData);

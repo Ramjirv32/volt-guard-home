@@ -12,7 +12,7 @@ const initialState: NotificationState = {
 export const fetchNotifications = createAsyncThunk(
   'notifications/fetchNotifications',
   async () => {
-    const response = await api.get('/notifications');
+    const response = await api.get('/api/notifications');
     return response.data as Notification[];
   }
 );
@@ -20,7 +20,7 @@ export const fetchNotifications = createAsyncThunk(
 export const markAsRead = createAsyncThunk(
   'notifications/markAsRead',
   async (id: string) => {
-    await api.patch(`/notifications/${id}/read`);
+    await api.patch(`/api/notifications/${id}/read`);
     return id;
   }
 );
@@ -28,7 +28,8 @@ export const markAsRead = createAsyncThunk(
 export const markAllAsRead = createAsyncThunk(
   'notifications/markAllAsRead',
   async () => {
-    await api.patch('/notifications/read-all');
+    await api.patch('/api/notifications/read-all');
+    return true;
   }
 );
 

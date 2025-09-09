@@ -93,8 +93,4 @@ export interface UserSettings {
   timezone: string;
 }
 
-// WebSocket Event Types
-export interface SocketEvent {
-  type: 'deviceUpdate' | 'energyUpdate' | 'alert' | 'presence';
-  payload: any;
-}
+// Add any other types below

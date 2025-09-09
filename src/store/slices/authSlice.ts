@@ -76,11 +76,20 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
       state.user = action.payload;
+      state.loading = false;
       state.error = null;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
     clearError: (state) => {
       state.error = null;
     },
+    logout: (state) => {
+      state.user = null;
+      state.loading = false;
+      state.error = null;
+    }
   },
   extraReducers: (builder) => {
     // Login with email

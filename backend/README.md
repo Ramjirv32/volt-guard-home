@@ -19,11 +19,35 @@
 
    # Production mode
    npm start
+   
+   # Run both server and data generator together
+   npm run start:all
    ```
 
 4. **Server will run on**
-   - HTTP: http://localhost:5000
-   - WebSocket: ws://localhost:5000
+   - http://localhost:5000
+
+## Data Generator
+
+The system includes a data generator that simulates IoT energy sensors sending data. This is useful for development, testing, and demo purposes.
+
+### Running the Data Generator
+
+```bash
+npm run generate
+```
+
+This will:
+1. Create sample devices if none exist
+2. Generate random energy data for each device
+3. Record the data to the database
+4. Repeat at configured intervals (default: 1 minute)
+
+### Configuration
+
+You can configure the data generator through environment variables in your `.env` file:
+- `GENERATOR_INTERVAL`: Time between data generation in milliseconds (default: 60000 - 1 minute)
+- `API_URL`: URL of the API server (default: http://localhost:5000)
 
 ## API Endpoints
 
@@ -46,6 +70,7 @@
 - `GET /api/iot/current` - Get current power usage
 - `POST /api/iot/record` - Record sensor data (for IoT devices)
 - `GET /api/iot/stats` - Get energy statistics
+- `GET /api/iot/breakdown` - Get device energy usage breakdown
 
 ### Notifications
 - `GET /api/notifications` - Get all notifications
@@ -56,16 +81,7 @@
 
 ## WebSocket Events
 
-### Client → Server
-- `join` - Join user room for targeted updates
-- `deviceControl` - Control device
-- `requestEnergyUpdate` - Request energy data
-
-### Server → Client
-- `deviceUpdate` - Device status changed
-- `energyUpdate` - New energy data available
-- `alert` - New notification
-- `presence` - Presence detection event
+*Note: WebSocket functionality has been removed in favor of traditional polling methods.*
 
 ## Testing with Demo Account
 
@@ -77,18 +93,20 @@ This will return demo data without requiring real devices.
 
 ## IoT Sensor Integration
 
-Send PZEM-004T data to `/api/iot/record`:
+Send energy sensor data to `/api/iot/record`:
 ```json
 {
   "sensorId": "PZEM-001",
   "voltage": 230.5,
   "current": 2.3,
   "power": 529.15,
-  "energy": 125.4,
+  "energy": 0.125,
   "powerFactor": 0.95,
   "frequency": 50
 }
 ```
+
+The data generator can be used to simulate this data automatically.
 
 ## Database Schema
 

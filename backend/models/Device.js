@@ -39,7 +39,7 @@ const deviceSchema = new mongoose.Schema({
   },
   sensorId: {
     type: String,
-    sparse: true // For PZEM-004T or other sensor IDs
+    // Remove the index from here since we're using schema.index() below
   },
   automationRules: [{
     trigger: {
@@ -77,6 +77,6 @@ deviceSchema.pre('save', function(next) {
 
 // Index for faster queries
 deviceSchema.index({ userId: 1, status: 1 });
-deviceSchema.index({ sensorId: 1 });
+deviceSchema.index({ sensorId: 1 }, { sparse: true });
 
 module.exports = mongoose.model('Device', deviceSchema);
