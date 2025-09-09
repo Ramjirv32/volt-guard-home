@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Zap, Mail, Chrome } from "lucide-react";
+import { Zap, Mail, Chrome, Eye } from "lucide-react";
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +33,21 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     const result = await dispatch(loginWithGoogle());
     if (loginWithGoogle.fulfilled.match(result)) {
+      navigate(from, { replace: true });
+    }
+  };
+
+  const handleViewerLogin = async () => {
+    // Set default viewer credentials
+    const viewerEmail = "viewer@smarthome.demo";
+    const viewerPassword = "Demo123!";
+    
+    const result = await dispatch(loginWithEmail({ 
+      email: viewerEmail, 
+      password: viewerPassword 
+    }));
+    
+    if (loginWithEmail.fulfilled.match(result)) {
       navigate(from, { replace: true });
     }
   };
@@ -124,6 +139,23 @@ export default function Login() {
               <Chrome className="mr-2 h-4 w-4" />
               Google
             </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full h-11 bg-gradient-energy hover:opacity-90 transition-opacity"
+              onClick={handleViewerLogin}
+              disabled={loading}
+              type="button"
+            >
+              <Eye className="mr-2 h-4 w-4" />
+              Viewer Demo Login
+            </Button>
+            
+            <div className="text-center">
+              <p className="text-xs text-muted-foreground">
+                Demo credentials: viewer@smarthome.demo / Demo123!
+              </p>
+            </div>
           </CardContent>
 
           <CardFooter>

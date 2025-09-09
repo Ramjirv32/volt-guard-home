@@ -14,6 +14,18 @@ const initialState: AuthState = {
 export const loginWithEmail = createAsyncThunk(
   'auth/loginWithEmail',
   async ({ email, password }: { email: string; password: string }) => {
+    // For demo viewer login, bypass Firebase and return mock user
+    if (email === 'viewer@smarthome.demo' && password === 'Demo123!') {
+      return {
+        uid: 'demo-viewer-uid',
+        email: 'viewer@smarthome.demo',
+        displayName: 'Demo Viewer',
+        photoURL: null,
+        emailVerified: true,
+      } as User;
+    }
+    
+    // Normal Firebase login
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return {
       uid: userCredential.user.uid,
